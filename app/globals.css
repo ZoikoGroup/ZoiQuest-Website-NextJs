@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0c2e30;
+  --surface: #ffffff;
+  --cyan-10: #07282c;
+  --cyan-12: #0c2e30;
+  --cyan-21: #10535a;
+  --cyan-22: #165258;
+  --cyan-37: #466b6f;
+  --cyan-39: #00c8b8;
+  --cyan-72: #88c9cc;
+  --cyan-81: #b4d6d8;
+  --cyan-85: #c4dfdf;
+  --cyan-86: #cde3e5;
+  --cyan-89: #dce8e9;
+  --grey-93: #e6f2f1;
+  --grey-94: #eaf4f3;
+  --grey-96: #f4f8f8;
+  --teal-950: #07282c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-onest), "Onest", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-onest), "Onest", sans-serif;
+}
+
+@keyframes zq-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zq-float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes zq-ambient-drift {
+  0% {
+    transform: translate3d(0px, 0px, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(28px, -18px, 0) scale(1.06);
+  }
+}
+
+@keyframes zq-signal-flow {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(200%);
+    opacity: 0;
+  }
+}
+
+@keyframes zq-pulse-dot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.45;
+  }
+}
+
+@keyframes zq-draw-chart {
+  from {
+    stroke-dashoffset: 440;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes zq-word-rise {
+  from {
+    opacity: 0;
+    transform: translateY(115%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+
+.animate-zq-fade-up {
+  animation: zq-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-zq-float {
+  animation: zq-float 6s ease-in-out infinite;
+}
+
+.animate-zq-drift {
+  animation: zq-ambient-drift 14s ease-in-out infinite alternate;
+}
+
+.animate-zq-signal {
+  animation: zq-signal-flow 2.6s ease-in-out infinite;
+}
+
+.animate-zq-pulse-dot {
+  animation: zq-pulse-dot 2.4s ease-in-out infinite;
+}
+
+.animate-zq-draw-chart {
+  stroke-dasharray: 440;
+  stroke-dashoffset: 440;
+  animation: zq-draw-chart 1.4s ease-out forwards;
+}
+
+.animate-zq-word-rise {
+  animation: zq-word-rise 0.72s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-zq-fade-up,
+  .animate-zq-float,
+  .animate-zq-drift,
+  .animate-zq-signal,
+  .animate-zq-pulse-dot,
+  .animate-zq-draw-chart,
+  .animate-zq-word-rise {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .zq-reveal,
+  .zq-word-inner {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
