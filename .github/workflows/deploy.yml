@@ -1,0 +1,88 @@
+name: Deploy ZoiQuest
+
+# Every merge to main builds the site on GitHub and deploys it to the VM.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-zoiquest
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # The site needs no environment variables to build or run.
+      - name: Install and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Configure SSH
+        env:
+          VM_HOST: ${{ secrets.VM_HOST }}
+          VM_SSH_KEY_B64: ${{ secrets.VM_SSH_KEY_B64 }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$VM_SSH_KEY_B64" | base64 -d > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keygen -y -f ~/.ssh/id_ed25519 > /dev/null
+          ssh-keyscan -H "$VM_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Sync files to VM
+        env:
+          VM_HOST: ${{ secrets.VM_HOST }}
+          VM_USER: ${{ secrets.VM_USER }}
+        run: |
+          rsync -az --delete \
+            --exclude node_modules --exclude .git --exclude .github \
+            --exclude '.env*' --exclude .deployed-lock --exclude .next/cache \
+            ./ "$VM_USER@$VM_HOST:~/zoiquest/"
+
+      # Only the zoiquest PM2 app is restarted; the other sites on the VM are never touched.
+      - name: Install deps if changed and restart
+        env:
+          VM_HOST: ${{ secrets.VM_HOST }}
+          VM_USER: ${{ secrets.VM_USER }}
+        run: |
+          ssh "$VM_USER@$VM_HOST" 'set -e
+            cd ~/zoiquest
+            if ! cmp -s package-lock.json .deployed-lock; then
+              npm ci
+              cp package-lock.json .deployed-lock
+            fi
+            pm2 restart zoiquest --update-env
+            pm2 save'
+
+      # Checked from inside the VM, so a CDN or firewall that blocks GitHub's servers can never fake an outage.
+      - name: Verify on the VM
+        env:
+          VM_HOST: ${{ secrets.VM_HOST }}
+          VM_USER: ${{ secrets.VM_USER }}
+        run: |
+          ssh "$VM_USER@$VM_HOST" 'set -e
+            PORT=$(cat ~/.zoiquest_port)
+            ok=0
+            for i in $(seq 1 20); do
+              if curl -fsS -o /dev/null "http://127.0.0.1:$PORT/"; then ok=1; break; fi
+              sleep 3
+            done
+            [ "$ok" = 1 ] || { echo "ZoiQuest did not come up on port $PORT: see pm2 logs zoiquest on the VM"; exit 1; }
+            echo "ZoiQuest is healthy on port $PORT"
+            curl -fsS -o /dev/null --resolve zoiquest.com:443:127.0.0.1 https://zoiquest.com/
+            echo "nginx and HTTPS for zoiquest.com are healthy"'
+
+      # Informational only: a 403 here means a CDN or firewall blocks GitHub's servers, not that the site is down.
+      - name: Public reachability from GitHub's network (informational)
+        continue-on-error: true
+        run: curl -sS -o /dev/null -m 20 -w "https://zoiquest.com/ -> %{http_code}\n" https://zoiquest.com/ || true
