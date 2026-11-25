@@ -120,7 +120,7 @@ const FOOTER_ROW_2: FooterSection[] = [
   {
     title: "Company",
     links: [
-      { label: "About ZoiQuest", href: "#about" },
+      { label: "About ZoiQuest", href: "/about" },
       { label: "Contact us", href: "#contact" },
       { label: "Careers", href: "#careers" },
       { label: "Newsroom", href: "#newsroom" },
