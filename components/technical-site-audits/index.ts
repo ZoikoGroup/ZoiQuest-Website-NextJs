@@ -1,0 +1,13 @@
+export { default as Hero } from "./Hero";
+export { default as Categories } from "./Categories";
+export { default as FindingTypes } from "./FindingTypes";
+export { default as Severity } from "./Severity";
+export { default as HowItWorks } from "./HowItWorks";
+export { default as Approach } from "./Approach";
+export { default as Misreadings } from "./Misreadings";
+export { default as EvidenceBanner } from "./EvidenceBanner";
+export { default as Capabilities } from "./Capabilities";
+export { default as Audience } from "./Audience";
+export { default as Independent } from "./Independent";
+export { default as Faq } from "./Faq";
+export { default as Cta } from "./Cta";

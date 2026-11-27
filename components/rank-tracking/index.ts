@@ -1,0 +1,10 @@
+export { default as Hero } from "./Hero";
+export { default as WhatIs } from "./WhatIs";
+export { default as Audience } from "./Audience";
+export { default as Approach } from "./Approach";
+export { default as Platform } from "./Platform";
+export { default as WhyZoiQuest } from "./WhyZoiQuest";
+export { default as Comparability } from "./Comparability";
+export { default as Capabilities } from "./Capabilities";
+export { default as Cta } from "./Cta";
+export { default as Faq } from "./Faq";
