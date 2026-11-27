@@ -27,24 +27,24 @@ export const MEGA_MENU_SECTIONS: MegaMenuSection[] = [
         links: [
           { label: "Keyword research", href: "#keyword-research" },
           { label: "SERP analysis", href: "#serp-analysis" },
-          { label: "Rank tracking", href: "#rank-tracking" },
-          { label: "Technical site audits", href: "#technical-site-audits" },
+          { label: "Rank tracking", href: "/rank-tracking" },
+          { label: "Technical site audits", href: "/technical-site-audits" },
         ],
       },
       {
         heading: "AI discovery",
         links: [
-          { label: "AI visibility", href: "#ai-visibility" },
-          { label: "Prompt research", href: "#prompt-research" },
+          { label: "AI visibility", href: "/ai-visibility" },
+          { label: "Prompt research", href: "/prompt-research" },
           { label: "Answer mentions & citations", href: "#answer-mentions" },
-          { label: "Entity & source intelligence", href: "#entity-intelligence" },
+          { label: "Entity & source intelligence", href: "/entity-source-intelligence" },
         ],
       },
       {
         heading: "Market & authority",
         links: [
-          { label: "Competitor benchmarking", href: "#competitor-benchmarking" },
-          { label: "Backlink intelligence", href: "#backlink-intelligence" },
+          { label: "Competitor benchmarking", href: "/competitor-benchmarking" },
+          { label: "Backlink intelligence", href: "/backlink-intelligence" },
           { label: "Share of voice", href: "#share-of-voice" },
           { label: "Market demand", href: "#market-demand" },
         ],
